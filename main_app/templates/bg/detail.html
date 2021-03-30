@@ -10,6 +10,10 @@
         <p>Description: {{ boardgame.description }}</p>
         <p>Release Year: {{ boardgame.release }}</p>
     </div>
+    <div class="card-action">
+        <a href="{% url 'boardgames_update' boardgame.id %}">Edit</a>
+        <a href="{% url 'boardgames_delete' boardgame.id %}">Delete</a>
+    </div>
 </div>
 
 {% endblock %}

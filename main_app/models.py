@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class Boardgame(models.Model):
@@ -7,15 +8,8 @@ class Boardgame(models.Model):
     description = models.CharField(max_length=250)
     release = models.IntegerField()
 
-
-# class Boardgame:  # Note that parens are optional if not inheriting from another class
-#   def __init__(self, name, players, description, release):
-#     self.name = name
-#     self.players = players
-#     self.description = description
-#     self.release = release
-# boardgames = [
-#   Boardgame('Catan', '3-4', 'Build the best settlement on the island of Catan.', 1995),
-#   Boardgame('Journeys in Middle Earth', '1-5', 'Play as one of many heroes of Middle Earth through a 12-15 chapter campaign.', 2019),
-#   Boardgame('Secret Hitler', '5-10', 'Hidden identity, social deduction party game.', 2016)
-# ]
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'boardgame_id': self.id})
+        # detail is defined from Model (name="detail")
+        # kwargs='cat_id' is how we've written our cats' ids
+        # self.id calls on Cat Model and its id

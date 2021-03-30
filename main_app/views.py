@@ -2,7 +2,20 @@ from django.shortcuts import render
 from .models import Boardgame
 
 # Create your views here.
-from django.http import HttpResponse
+# from django.http import HttpResponse
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+class BoardgameCreate(CreateView):
+    model = Boardgame
+    fields = '__all__'
+
+class BoardgameUpdate(UpdateView):
+    model = Boardgame
+    fields = '__all__'
+
+class BoardgameDelete(DeleteView):
+    model = Boardgame
+    success_url = '/boardgames/'
 
 # Define the home view
 def home(request):
