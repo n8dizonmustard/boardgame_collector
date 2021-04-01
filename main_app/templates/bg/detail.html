@@ -3,17 +3,79 @@
 
 <h1>Boardgame Details</h1>
 
-<div class="card">
-    <div class="card-content">
-        <span class="card-title">{{ boardgame.name }}</span>
-        <p>Players: {{ boardgame.players }}</p>
-        <p>Description: {{ boardgame.description }}</p>
-        <p>Release Year: {{ boardgame.release }}</p>
+<div class="row">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ boardgame.name }}</span>
+            <p>Players: {{ boardgame.players }}</p>
+            <p>Description: {{ boardgame.description }}</p>
+            <p>Release Year: {{ boardgame.release }}</p>
+        </div>
     </div>
-    <div class="card-action">
-        <a href="{% url 'boardgames_update' boardgame.id %}">Edit</a>
-        <a href="{% url 'boardgames_delete' boardgame.id %}">Delete</a>
+    <hr>
+    <div class="row">
+        <div class="col s6">
+            <h3>{{ boardgame.name }} is Sold At:</h3>
+            {% if boardgame.stores.count %}
+                {% for store in boardgame.stores.all %}
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">
+                                {{ store.name }}
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h5>Unavailable (T-T )</h5>
+            {% endif %}
+        </div>
+        <!-- Available stores will come after this line -->
+        <div class="col s6">
+            <h3>All Stores</h3>
+            {% if stores.count %}
+                {% for store in stores.all %}
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">{{ store.name }}</span>
+                            <form action="{% url 'assoc_store' boardgame.id store.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn">Add</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+            <h5>{{boardgame.name}} is sold everywhere.</h5>
+            {% endif %}
+        </div>
     </div>
+
+    <hr>
+    <form action="{% url 'add_review' boardgame.id %}" method="post">
+        {% csrf_token %}
+        {{ review_form.as_p }}
+        <input type="submit" class="btn" value="Add Review">
+    </form>
+    <table class="striped">
+        <thead>
+            <tr><th>Rating</th><th>Review</th></tr>
+        </thead>
+        <tbody>
+            {% for review in boardgame.review_set.all %}
+                <tr>
+                    <td>{{ review.stars }}</td>
+                    <td>{{ review.content }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
+
+
+<script>
+    const selectEl = document.getElementById('id_stars');
+    M.FormSelect.init(selectEl);
+</script>
 
 {% endblock %}
